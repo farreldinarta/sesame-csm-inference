@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+dist/
+build/
+
+# Virtualenv
+.env
+.venv
+venv/
+ENV/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Testing
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+htmlcov/
+.cache/
+
+# Mypy
+.mypy_cache/
+
+# Pylint
+.pylint.d/
+
+# Environments and secrets
+.env
+
+# FastAPI auto-generated files (if any)
+instance/
+*.db
+
+# Docker
+docker-compose.override.yml
+*.pid
+
+# VSCode launch/debug config
+.vscode/launch.json
+.vscode/settings.json
+
+# Other
+*.sqlite3
