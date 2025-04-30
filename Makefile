@@ -19,7 +19,7 @@ run:
 		-v $(shell pwd)/pytest.ini:/code/pytest.ini \
 		-p $(APP_PORT):$(CONTAINER_PORT) \
 		-e ENVIRONMENT=$(ENVIRONMENT) \
-		$(APP_NAME)
+		$(IMAGE_NAME)
 
 logs:
 	docker logs -f $(APP_NAME)

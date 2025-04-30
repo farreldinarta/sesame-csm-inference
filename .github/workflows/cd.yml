@@ -36,7 +36,8 @@ jobs:
         echo "APP_NAME: $APP_NAME"
         echo "HUGGINGFACE_ACCESS_TOKEN: $HUGGINGFACE_ACCESS_TOKEN"
         echo "APP_PORT: $APP_PORT"
-        echo "CONTAINER_PORT: $CONTAINER_PORT"      
+        echo "CONTAINER_PORT: $CONTAINER_PORT"
+        echo "Full Docker Image Name: $DOCKER_USERNAME/$APP_NAME" 
 
     - name: Refresh Container
       run: |
@@ -46,8 +47,8 @@ jobs:
 
     - name: Run Container 
       run: docker run -d \
-        --name "$APP_NAME" \
-        -p "$APP_PORT:$CONTAINER_PORT" \
+        --name $APP_NAME \
+        -p $APP_PORT:$CONTAINER_PORT \
         -e ENVIRONMENT=production \
         $DOCKER_USERNAME/$APP_NAME
 
