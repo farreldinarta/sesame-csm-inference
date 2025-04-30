@@ -32,8 +32,14 @@ class SesameCSMLLMProvider(LLMInterface):
 
     self.__speakers = [0 for _ in self.__transcripts]
 
+    # Get the absolute path of the current file (this will be in the 'llm' folder, inside 'provider')
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    audio_path = os.path.join(base_dir, "app/storage/audio")
+
+    # Move up four levels to get to the project root (assuming this file is in /code/app/provider/llm/)
+    root_dir = os.path.abspath(os.path.join(base_dir, "..", "..", "..", ".."))
+
+    # Now build the path to the 'storage/audio' directory from the project root
+    audio_path = os.path.join(root_dir, "storage", "audio")
     self.__audio_paths = [
         os.path.join(audio_path, "ginny_sample_1.wav"),
         os.path.join(audio_path, "ginny_sample_2.wav")
