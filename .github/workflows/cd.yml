@@ -23,6 +23,7 @@ jobs:
 
     - name: Load .env variables globally
       run: |
+        cp .env.example .env
         grep -v '^#' .env >> $GITHUB_ENV
 
     - name: Login DockerHub
