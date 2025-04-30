@@ -8,7 +8,7 @@ IMAGE_NAME=$(DOCKER_USERNAME)/$(APP_NAME)
 build:
 	docker stop $(APP_NAME) || true
 	docker rm $(APP_NAME) || true
-	docker build --build-arg PORT=$(APP_PORT) --build-arg ENVIRONMENT=$(ENVIRONMENT) -t $(APP_NAME) .
+	docker build --build-arg PORT=$(APP_PORT) --build-arg ENVIRONMENT=$(ENVIRONMENT) -t $(IMAGE_NAME) .
 
 run:
 	docker run -d \

@@ -20,8 +20,6 @@ jobs:
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}      
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD      
-    - name: Pull Docker Image 
-      run: sudo docker pull $DOCKER_USERNAME/$APP_NAME:latest
     - name: Refresh Container
       run: make build
     - name: Run Container 
