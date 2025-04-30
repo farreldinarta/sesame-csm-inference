@@ -12,15 +12,15 @@ jobs:
 
     runs-on: self-hosted
     env:
+      DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}      
       APP_NAME: ${{ secrets.APP_NAME }}        
 
     steps:
-    - name : Pull Docker Image 
-      run : sudo docker pull $DOCKER_USERNAME/$APP_NAME:latest
     - name : Login DockerHub
       env :
-        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}      
+    - name : Pull Docker Image 
+      run : sudo docker pull $DOCKER_USERNAME/$APP_NAME:latest
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD      
     - name : Refresh Container
       run : make build
