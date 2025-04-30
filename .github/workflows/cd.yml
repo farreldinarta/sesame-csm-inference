@@ -51,6 +51,7 @@ jobs:
           --name "$APP_NAME" \
           -p "$APP_PORT:$CONTAINER_PORT" \
           -e ENVIRONMENT=production \
+          -e HUGGINGFACE_ACCESS_TOKEN=$HUGGINGFACE_ACCESS_TOKEN \
           "$DOCKER_USERNAME/$APP_NAME"
 
     # - name: Push to DockerHub
