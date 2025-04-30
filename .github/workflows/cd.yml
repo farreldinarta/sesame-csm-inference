@@ -33,9 +33,13 @@ jobs:
       run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin      
 
     - name: Refresh Container
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}  
+        APP_NAME: ${{ secrets.APP_NAME }}    
       run: |
         docker stop $DOCKER_USERNAME/$APP_NAME || true
         docker rm $DOCKER_USERNAME/$APP_NAME || true
+        echo "APP_PORT: $APP_PORT"
         docker build --build-arg PORT=$APP_PORT --build-arg ENVIRONMENT=production -t $DOCKER_USERNAME/$APP_NAME .
 
     - name: Run Container 
