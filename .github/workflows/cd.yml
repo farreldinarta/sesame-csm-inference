@@ -30,6 +30,14 @@ jobs:
     - name: Login DockerHub
       run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin      
 
+    - name: Debug Environment Variables
+      run: |
+        echo "DOCKER_USERNAME: $DOCKER_USERNAME"
+        echo "APP_NAME: $APP_NAME"
+        echo "HUGGINGFACE_ACCESS_TOKEN: $HUGGINGFACE_ACCESS_TOKEN"
+        echo "APP_PORT: $APP_PORT"
+        echo "CONTAINER_PORT: $CONTAINER_PORT"      
+
     - name: Refresh Container
       run: |
         docker stop $DOCKER_USERNAME/$APP_NAME || true
@@ -38,7 +46,7 @@ jobs:
 
     - name: Run Container 
       run: docker run -d \
-        --name $DOCKER_USERNAME/$APP_NAME \
+        --name $APP_NAME \
         -p $APP_PORT:$CONTAINER_PORT \
         -e PORT=$APP_PORT \
         -e ENVIRONMENT=production \
