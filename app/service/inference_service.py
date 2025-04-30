@@ -1,7 +1,8 @@
+import io
 from fastapi import Depends
-from app.dto.base import APIResponse
-from app.dto.inference_dto import GenerateCodeInferenceRequest, GenerateCodeInferenceResponse
+from app.dto.inference_dto import GenerateCodeInferenceRequest
 from app.provider.llm.base import LLM, get_llm
+from app.exception.http_exception import HTTPException
 from app.utils.object import singleton
 
 @singleton
@@ -9,19 +10,16 @@ class InferenceService:
   def __init__(self, llm: LLM):
     self.__llm = llm
 
-  async def generate(self, payload : GenerateCodeInferenceRequest) -> APIResponse[GenerateCodeInferenceResponse, str]:
-    print("EHHEHE")
-    test_bool : bool = await self.__llm.get_sesame_csm_model().inference(payload.text)
-    if not test_bool:
-      return APIResponse(
+  async def generate(self, payload : GenerateCodeInferenceRequest) -> io.BytesIO:
+    audio_buffer : io.BytesIO = await self.__llm.get_sesame_csm_model().inference(payload.text)
+    if not audio_buffer:
+      raise HTTPException(
+        status=500,
         message="Failed to generate code",
-        error="Failed to generate code"
+        error=None
       )
 
-    return APIResponse(
-        message="Successfully generated code",
-        data=GenerateCodeInferenceResponse(data="ABC123")
-    )
+    return audio_buffer
 
 def get_inference_service(llm : LLM = Depends(get_llm)) -> InferenceService:
   return InferenceService(llm=llm)

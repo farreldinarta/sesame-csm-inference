@@ -1,4 +1,6 @@
+import io
 import inspect
+from fastapi.responses import StreamingResponse
 from typing import Any
 from tests.utils.exceptions.test_exception import TestFailureException
 from app.provider.llm.interface import LLMInterface
@@ -13,7 +15,7 @@ class SesameCSMLLMProviderMock(LLMInterface):
       self.__inference_returning_value = returning
       return self
 
-    async def inference(self, prompt : str) -> bool:
+    async def inference(self, prompt : str) -> io.BytesIO:
       if (prompt != self.__inference_expected_arg):
         raise TestFailureException(f"""
           {inspect.currentframe().f_code.co_name} function argument mismatch :

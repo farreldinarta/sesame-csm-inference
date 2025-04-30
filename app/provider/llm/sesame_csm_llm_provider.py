@@ -1,4 +1,7 @@
+import io
 import torch
+import torchaudio
+from fastapi.responses import StreamingResponse
 from app.utils.object import singleton
 from app.provider.llm.interface import LLMInterface
 from app.provider.llm.sesame_csm_utils.sesame_csm_generator import Generator, load_csm_1b
@@ -22,9 +25,21 @@ class SesameCSMLLMProvider(LLMInterface):
     
     self.__model = load_csm_1b(device=self.__device)
 
-  async def inference(self, prompt : str) -> bool:
-    self.__model = load_csm_1b(device=self.__device)
-    return prompt == 'test'
+  async def inference(self, prompt : str) -> io.BytesIO:
+
+    audio = self.__model.generate(
+        prompt,
+        speaker=0,
+        context=[],
+        max_audio_length_ms=90_000,
+        temperature=0.9,
+        topk=50
+    )
+    buffer = io.BytesIO()
+    torchaudio.save(buffer, audio.unsqueeze(0).cpu(), self.__model.sample_rate, format="wav")
+    buffer.seek(0)  
+
+    return buffer
   
 def get_sesame_csm_model() -> LLMInterface:
   return SesameCSMLLMProvider()
