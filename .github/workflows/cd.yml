@@ -41,8 +41,8 @@ jobs:
 
     - name: Refresh Container
       run: |
-        docker stop $DOCKER_USERNAME/$APP_NAME || true
-        docker rm $DOCKER_USERNAME/$APP_NAME || true
+        docker stop $APP_NAME || true
+        docker rm $APP_NAME || true
         docker build --build-arg PORT=$APP_PORT --build-arg ENVIRONMENT=production -t $DOCKER_USERNAME/$APP_NAME .
 
     - name: Run Container 
