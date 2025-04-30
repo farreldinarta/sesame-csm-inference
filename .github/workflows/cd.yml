@@ -11,22 +11,40 @@ jobs:
   build:
 
     runs-on: self-hosted
-    
+
     env:
-      DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}      
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}      
       APP_NAME: ${{ secrets.APP_NAME }}    
-      HUGGINGFACE_ACCESS_TOKEN: ${{secrets.HUGGINGFACE_ACCESS_TOKEN}}    
+      HUGGINGFACE_ACCESS_TOKEN: ${{ secrets.HUGGINGFACE_ACCESS_TOKEN }}    
 
     steps:
-    - name : Checkout Repo 
+    - name: Checkout Repo 
       uses: actions/checkout@v4
+
+    - name: Load .env variables globally
+      run: |
+        grep -v '^#' .env >> $GITHUB_ENV
+
     - name: Login DockerHub
       env:
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}      
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD      
+
     - name: Refresh Container
-      run: make build
+      run: |
+        docker stop $DOCKER_USERNAME/$APP_NAME || true
+        docker rm $DOCKER_USERNAME/$APP_NAME || true
+        docker build --build-arg PORT=$APP_PORT --build-arg ENVIRONMENT=production -t $DOCKER_USERNAME/$APP_NAME .
+
     - name: Run Container 
-      run: make run
+      run: |
+        docker run -d \
+          --name $DOCKER_USERNAME/$APP_NAME \
+          -p $APP_PORT:$CONTAINER_PORT \
+          -e PORT=$APP_PORT \
+          -e ENVIRONMENT=production \
+          $DOCKER_USERNAME/$APP_NAME
+
     - name: Push to DockerHub
       run: docker push $DOCKER_USERNAME/$APP_NAME:latest
+
