@@ -4,10 +4,9 @@ import base64
 import torch
 import torchaudio
 import tempfile
-from fastapi.responses import StreamingResponse
 from app.utils.object import singleton
 from app.provider.llm.interface import LLMInterface
-from app.provider.llm.sesame_csm_utils.sesame_csm_generator import Generator, load_csm_1b
+from app.provider.llm.sesame_csm_utils.sesame_csm_generator import load_csm_1b, Segment
 from app.configs.environment import get_environment_variables
 
 env = get_environment_variables()
@@ -25,15 +24,39 @@ class SesameCSMLLMProvider(LLMInterface):
         self.__device = "cpu"
 
     print("Used Device : ", self.__device)
+
+    self.__transcripts = [
+       "Hello, how are you today? I hope you are doing well.",
+       "Thank you for your cooperation, have a great day ahead!"
+    ]
+
+    self.__speakers = [0 for transcript in self.__transcripts.length]
+
+    self.__audio_paths = [
+        "../../storage/audio/ginny_sample_1.wav",
+        "../../storage/audio/ginny_sample_2.wav"
+    ]
+
+    self.__segments = [
+        Segment(text=transcript, speaker=speaker, audio=self.__load_audio(audio_path))
+        for transcript, speaker, audio_path in zip(self.__transcripts, self.__speakers, self.__audio_paths)
+    ]
     
     self.__model = load_csm_1b(device=self.__device)
+
+  def __load_audio(self, audio_path):
+    audio_tensor, sample_rate = torchaudio.load(audio_path)
+    audio_tensor = torchaudio.functional.resample(
+        audio_tensor.squeeze(0), orig_freq=sample_rate, new_freq=self.__model.sample_rate
+    )
+    return audio_tensor    
 
   async def inference(self, prompt : str) -> io.BytesIO:
 
     audio = self.__model.generate(
         prompt,
         speaker=0,
-        context=[],
+        context=self.__segments,
         max_audio_length_ms=90_000,
         temperature=0.9,
         topk=50
