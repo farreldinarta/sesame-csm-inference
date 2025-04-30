@@ -46,11 +46,12 @@ jobs:
         docker build --build-arg PORT=$APP_PORT --build-arg ENVIRONMENT=production -t $DOCKER_USERNAME/$APP_NAME .
 
     - name: Run Container 
-      run: docker run -d \
-        --name $APP_NAME \
-        -p $APP_PORT:$CONTAINER_PORT \
-        -e ENVIRONMENT=production \
-        $DOCKER_USERNAME/$APP_NAME
+      run: |
+        docker run -d \
+          --name "$APP_NAME" \
+          -p "$APP_PORT:$CONTAINER_PORT" \
+          -e ENVIRONMENT=production \
+          "$DOCKER_USERNAME/$APP_NAME"
 
     - name: Push to DockerHub
       run: |
