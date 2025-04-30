@@ -12,7 +12,7 @@ build:
 
 run:
 	docker run -d \
-		--name $(IMAGE_NAME) \
+		--name $(APP_NAME) \
 		-v $(shell pwd)/app:/code/app \
 		-v $(shell pwd)/tests:/code/tests \
 		-v $(shell pwd)/.env:/code/.env \
@@ -20,7 +20,7 @@ run:
 		-p $(APP_PORT):$(CONTAINER_PORT) \
 		-e PORT=$(APP_PORT) \
 		-e ENVIRONMENT=$(ENVIRONMENT) \
-		$(IMAGE_NAME)
+		$(APP_NAME)
 
 logs:
 	docker logs -f $(APP_NAME)
