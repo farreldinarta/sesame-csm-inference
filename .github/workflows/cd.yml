@@ -1,0 +1,30 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Build"]
+    types:
+      - completed
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+    env:
+      APP_NAME: ${{ secrets.APP_NAME }}        
+
+    steps:
+    - name : Pull Docker Image 
+      run : sudo docker pull $DOCKER_USERNAME/$APP_NAME:latest
+    - name : Login DockerHub
+      env :
+        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD      
+    - name : Refresh Container
+      run : make build
+    - name : Run Container 
+      run : make run
+    - name: Push to DockerHub
+      run: docker push $DOCKER_USERNAME/$APP_NAME
