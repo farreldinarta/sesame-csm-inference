@@ -25,7 +25,7 @@ jobs:
     - name: Load .env variables globally
       run: |
         cp .env.example .env
-        grep -v '^#' .env | grep -v 'DOCKER_USERNAME' | grep -v 'APP_NAME' | grep -v 'DOCKER_PASSWORD' >> $GITHUB_ENV
+        grep -v '^#' .env | grep -Ev '^(DOCKER_USERNAME|APP_NAME|DOCKER_PASSWORD|HUGGINGFACE_ACCESS_TOKEN)=' >> $GITHUB_ENV        
 
     - name: Login DockerHub
       run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin      
