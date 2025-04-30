@@ -19,6 +19,7 @@ class InferenceService:
         error=None
       )
 
+    print(audio_buffer)
     return audio_buffer
 
 def get_inference_service(llm : LLM = Depends(get_llm)) -> InferenceService:
