@@ -1,4 +1,5 @@
 import io
+import base64
 import torch
 import torchaudio
 from fastapi.responses import StreamingResponse
