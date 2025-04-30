@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class GenerateCodeInferenceRequest(BaseModel):
-  data : str
+  text : str
 
 class GenerateCodeInferenceResponse(BaseModel):
   data : str

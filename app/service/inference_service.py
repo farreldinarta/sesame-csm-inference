@@ -11,7 +11,7 @@ class InferenceService:
 
   async def generate(self, payload : GenerateCodeInferenceRequest) -> APIResponse[GenerateCodeInferenceResponse, str]:
     print("EHHEHE")
-    test_bool : bool = await self.__llm.get_sesame_csm_model().inference(payload.data)
+    test_bool : bool = await self.__llm.get_sesame_csm_model().inference(payload.text)
     if not test_bool:
       return APIResponse(
         message="Failed to generate code",

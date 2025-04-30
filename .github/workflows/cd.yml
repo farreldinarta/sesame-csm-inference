@@ -21,10 +21,10 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}      
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD      
     - name: Pull Docker Image 
-      run: sudo docker pull $DOCKER_USERNAME/$APP_NAME
+      run: sudo docker pull $DOCKER_USERNAME/$APP_NAME:latest
     - name: Refresh Container
       run: make build
     - name: Run Container 
       run: make run
     - name: Push to DockerHub
-      run: docker push $DOCKER_USERNAME/$APP_NAME
+      run: docker push $DOCKER_USERNAME/$APP_NAME:latest

@@ -14,7 +14,7 @@ async def test_generate():
       TestCase(
         description="Test case 1",
         data={
-          "data": "tests", 
+          "text": "tests", 
           "returning" : True
         },
         expected={
@@ -25,7 +25,7 @@ async def test_generate():
       TestCase(
         description="Test case 2",
         data={
-          "data": "another_value",
+          "text": "another_value",
           "returning" : False
         },
         expected={
@@ -47,7 +47,7 @@ async def test_generate():
     inference_service = InferenceService(llm=llm)
 
     response = await inference_service.generate(
-       GenerateCodeInferenceRequest(data=test.data["data"])
+       GenerateCodeInferenceRequest(data=test.data["text"])
       )
 
     assert response.message == test.expected["message"]
