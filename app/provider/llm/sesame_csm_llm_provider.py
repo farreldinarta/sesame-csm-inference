@@ -32,11 +32,11 @@ class SesameCSMLLMProvider(LLMInterface):
 
     self.__speakers = [0 for _ in self.__transcripts]
 
-    base_dir = os.path.dirname(__file__)  # Path to current file
-    audio_dir = os.path.join(base_dir, "../../../storage/audio")
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    audio_path = os.path.join(base_dir, "app/storage/audio")
     self.__audio_paths = [
-        os.path.join(audio_dir, "ginny_sample_1.wav"),
-        os.path.join(audio_dir, "ginny_sample_2.wav")
+        os.path.join(audio_path, "ginny_sample_1.wav"),
+        os.path.join(audio_path, "ginny_sample_2.wav")
     ]
 
     self.__segments = [
