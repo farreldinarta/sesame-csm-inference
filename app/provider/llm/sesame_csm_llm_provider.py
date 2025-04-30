@@ -1,7 +1,9 @@
 import io
+import os
 import base64
 import torch
 import torchaudio
+import tempfile
 from fastapi.responses import StreamingResponse
 from app.utils.object import singleton
 from app.provider.llm.interface import LLMInterface
@@ -36,26 +38,27 @@ class SesameCSMLLMProvider(LLMInterface):
         temperature=0.9,
         topk=50
     )
-    buffer = io.BytesIO()
-    torchaudio.save(buffer, audio.unsqueeze(0).cpu(), self.__model.sample_rate, format="wav")
-    buffer.seek(0)  
+    # Create a temporary WAV file
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
+        temp_path = tmp.name
 
-    # Debug print: buffer size
-    buffer.seek(0, io.SEEK_END)
-    size = buffer.tell()
-    print(f"[DEBUG] Buffer size: {size} bytes")
+    # Save audio to the temp file
+    torchaudio.save(temp_path, audio.unsqueeze(0).cpu(), self.__model.sample_rate)
 
-    # Debug print: preview first 20 bytes
+    # Load binary data into a BytesIO buffer
+    with open(temp_path, "rb") as f:
+        wav_data = f.read()
+
+    os.remove(temp_path)  # Clean up the temp file
+
+    # Return as BytesIO
+    buffer = io.BytesIO(wav_data)
     buffer.seek(0)
-    preview = buffer.read(20)
-    print(f"[DEBUG] First 20 bytes (raw): {preview}")
 
-    # Optional: Base64 preview (more readable, but limited length)
-    buffer.seek(0)
-    base64_preview = base64.b64encode(buffer.read(60)).decode('utf-8')
-    print(f"[DEBUG] First 60 bytes (base64): {base64_preview}")
-
-    buffer.seek(0)  # Reset before returning    
+    # Debugging (optional)
+    print(f"[DEBUG] Buffer size: {len(wav_data)} bytes")
+    print(f"[DEBUG] First 20 bytes (raw): {wav_data[:20]}")
+    print(f"[DEBUG] First 60 bytes (base64): {base64.b64encode(wav_data[:60]).decode()}")
 
     return buffer
   
