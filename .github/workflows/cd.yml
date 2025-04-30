@@ -16,6 +16,8 @@ jobs:
       APP_NAME: ${{ secrets.APP_NAME }}        
 
     steps:
+    - name : Checkout Repo 
+      uses: actions/checkout@v4
     - name: Login DockerHub
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}      
