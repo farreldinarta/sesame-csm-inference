@@ -30,7 +30,7 @@ class SesameCSMLLMProvider(LLMInterface):
        "Thank you for your cooperation, have a great day ahead!"
     ]
 
-    self.__speakers = [0 for transcript in self.__transcripts.length]
+    self.__speakers = [0 for transcript in len(self.__transcripts)]
 
     self.__audio_paths = [
         "../../storage/audio/ginny_sample_1.wav",
