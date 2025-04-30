@@ -46,8 +46,8 @@ jobs:
 
     - name: Run Container 
       run: docker run -d \
-        --name $APP_NAME \
-        -p $APP_PORT:$CONTAINER_PORT \
+        --name $DOCKER_USERNAME/$APP_NAME \
+        -p APP_PORT:$CONTAINER_PORT \
         -e PORT=$APP_PORT \
         -e ENVIRONMENT=production \
         $DOCKER_USERNAME/$APP_NAME
