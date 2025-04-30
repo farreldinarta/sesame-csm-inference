@@ -18,7 +18,6 @@ run:
 		-v $(shell pwd)/.env:/code/.env \
 		-v $(shell pwd)/pytest.ini:/code/pytest.ini \
 		-p $(APP_PORT):$(CONTAINER_PORT) \
-		-e PORT=$(APP_PORT) \
 		-e ENVIRONMENT=$(ENVIRONMENT) \
 		$(APP_NAME)
 

@@ -46,10 +46,10 @@ jobs:
 
     - name: Run Container 
       run: docker run -d \
-        --name $APP_NAME \
-        -p $APP_PORT:$CONTAINER_PORT \
+        --name "$APP_NAME" \
+        -p "$APP_PORT:$CONTAINER_PORT" \
         -e ENVIRONMENT=production \
-        $APP_NAME
+        $DOCKER_USERNAME/$APP_NAME
 
     - name: Push to DockerHub
       run: |
