@@ -44,6 +44,7 @@ class SesameCSMLLMProvider(LLMInterface):
         os.path.join(audio_path, "ginny_sample_1.wav"),
         os.path.join(audio_path, "ginny_sample_2.wav")
     ]
+    print(audio_path)
 
     self.__segments = [
         Segment(text=transcript, speaker=speaker, audio=self.__load_audio(audio_path))
