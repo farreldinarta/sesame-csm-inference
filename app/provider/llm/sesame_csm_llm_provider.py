@@ -39,6 +39,23 @@ class SesameCSMLLMProvider(LLMInterface):
     torchaudio.save(buffer, audio.unsqueeze(0).cpu(), self.__model.sample_rate, format="wav")
     buffer.seek(0)  
 
+    # Debug print: buffer size
+    buffer.seek(0, io.SEEK_END)
+    size = buffer.tell()
+    print(f"[DEBUG] Buffer size: {size} bytes")
+
+    # Debug print: preview first 20 bytes
+    buffer.seek(0)
+    preview = buffer.read(20)
+    print(f"[DEBUG] First 20 bytes (raw): {preview}")
+
+    # Optional: Base64 preview (more readable, but limited length)
+    buffer.seek(0)
+    base64_preview = base64.b64encode(buffer.read(60)).decode('utf-8')
+    print(f"[DEBUG] First 60 bytes (base64): {base64_preview}")
+
+    buffer.seek(0)  # Reset before returning    
+
     return buffer
   
 def get_sesame_csm_model() -> LLMInterface:
