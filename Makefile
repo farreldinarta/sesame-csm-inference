@@ -1,6 +1,10 @@
 include .env
 export $(shell sed 's/=.*//' .env)
 
+IMAGE_NAME=$(DOCKER_USERNAME)/$(APP_NAME)
+
+.PHONY: build run logs test
+
 build:
 	docker stop $(APP_NAME) || true
 	docker rm $(APP_NAME) || true
@@ -16,7 +20,7 @@ run:
 		-p $(APP_PORT):$(CONTAINER_PORT) \
 		-e PORT=$(APP_PORT) \
 		-e ENVIRONMENT=$(ENVIRONMENT) \
-		$(APP_NAME)
+		$(IMAGE_NAME)
 
 logs:
 	docker logs -f $(APP_NAME)
