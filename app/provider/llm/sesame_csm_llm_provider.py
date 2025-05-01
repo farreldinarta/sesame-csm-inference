@@ -32,11 +32,6 @@ class SesameCSMLLMProvider(LLMInterface):
 
     self.__speakers = [0 for _ in self.__transcripts]
 
-    # Get the absolute path of the current file (this will be in the 'llm' folder, inside 'provider')
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-
-
-    # Now build the path to the 'storage/audio' directory from the project root
     audio_path = os.path.join("/code/app", "storage", "audio")
     self.__audio_paths = [
         os.path.join(audio_path, "ginny_sample_1.wav"),
@@ -68,24 +63,19 @@ class SesameCSMLLMProvider(LLMInterface):
         temperature=0.9,
         topk=50
     )
-    # Create a temporary WAV file
     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
         temp_path = tmp.name
 
-    # Save audio to the temp file
     torchaudio.save(temp_path, audio.unsqueeze(0).cpu(), self.__model.sample_rate)
 
-    # Load binary data into a BytesIO buffer
     with open(temp_path, "rb") as f:
         wav_data = f.read()
 
-    os.remove(temp_path)  # Clean up the temp file
+    os.remove(temp_path)  
 
-    # Return as BytesIO
     buffer = io.BytesIO(wav_data)
     buffer.seek(0)
 
-    # Debugging (optional)
     print(f"[DEBUG] Buffer size: {len(wav_data)} bytes")
     print(f"[DEBUG] First 20 bytes (raw): {wav_data[:20]}")
     print(f"[DEBUG] First 60 bytes (base64): {base64.b64encode(wav_data[:60]).decode()}")
