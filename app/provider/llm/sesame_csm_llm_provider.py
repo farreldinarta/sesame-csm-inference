@@ -25,6 +25,8 @@ class SesameCSMLLMProvider(LLMInterface):
 
     print("Used Device : ", self.__device)
 
+    self.__model = load_csm_1b(device=self.__device)    
+
     self.__transcripts = [
        "Hello, how are you today? I hope you are doing well.",
        "Thank you for your cooperation, have a great day ahead!"
@@ -44,8 +46,6 @@ class SesameCSMLLMProvider(LLMInterface):
         for transcript, speaker, audio_path in zip(self.__transcripts, self.__speakers, self.__audio_paths)
     ]
     
-    self.__model = load_csm_1b(device=self.__device)
-
   def __load_audio(self, audio_path):
     audio_tensor, sample_rate = torchaudio.load(audio_path)
     audio_tensor = torchaudio.functional.resample(
